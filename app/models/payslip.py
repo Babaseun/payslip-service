@@ -3,8 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 class Payslip(db.Model):
-    __tablename__ = 'payslips'
+    __tablename__ = "payslips"
 
     id = db.Column(db.Integer, primary_key=True)
     employee_id = db.Column(db.String(64), nullable=False)
@@ -15,10 +16,10 @@ class Payslip(db.Model):
 
     def serialize(self):
         return {
-            'id': self.id,
-            'employee_id': self.employee_id,
-            'month': self.month,
-            'year': self.year,
-            'filename': self.filename,
-            'timestamp': self.timestamp.isoformat()
+            "id": self.id,
+            "employee_id": self.employee_id,
+            "month": self.month,
+            "year": self.year,
+            "filename": self.filename,
+            "timestamp": self.timestamp.isoformat(),
         }
