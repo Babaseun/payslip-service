@@ -1,6 +1,7 @@
 from flask import Flask
 from app.models.payslip import db
 from app.payslips.routes import payslip_bp
+from flask import current_app
 
 
 def create_app(config=None):
@@ -9,7 +10,7 @@ def create_app(config=None):
         app.config.from_object(config)
 
     app.config.from_prefixed_env()
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///payslips.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = current_app.config["DB_CONNECTION"]
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
