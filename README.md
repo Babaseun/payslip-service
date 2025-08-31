@@ -13,6 +13,28 @@
 
 ---
 
+## Project Structure
+
+```
+
+├── app
+│   ├── __init__.py
+│   ├── models
+│   └── payslips
+├── Dockerfile
+├── infrastructure
+│   └── terraform
+├── Pipfile
+├── Pipfile.lock
+├── README.md
+├── run.py
+└── tests
+    ├── __init__.py
+    ├── conftest.py
+    └── test_payslips
+
+```
+
 ## 📋 Requirements
 
 - [Python 3.13+](https://www.python.org/downloads/)
