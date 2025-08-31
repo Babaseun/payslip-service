@@ -7,6 +7,10 @@ payslip_bp = Blueprint("payslips", __name__, url_prefix="/payslips")
 @payslip_bp.route("/", methods=["POST"])
 def upload_payslip():
     try:
+        if not all([request.files.get("file"), request.form.get("employee_id"), 
+                    request.form.get("month"), request.form.get("year")]):
+            return jsonify({"error": "Missing required fields"}), 400
+
         payslip = upload_payslip_service(
             file=request.files.get("file"),
             employee_id=request.form.get("employee_id"),
