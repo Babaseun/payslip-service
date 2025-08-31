@@ -10,6 +10,8 @@ boto3 = "*"
 
 [dev-packages]
 black = "*"
+pytest = "*"
+moto = "*"
 
 [requires]
 python_version = "3.13"

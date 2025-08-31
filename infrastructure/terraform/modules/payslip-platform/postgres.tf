@@ -9,7 +9,7 @@ resource "aws_kms_key" "payslip_rds_key" {
       {
         Effect = "Allow"
         Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/kms-role"
         }
         Action   = "kms:*"
         Resource = "*"

@@ -1,3 +1,4 @@
+# PostgreSQL provider to connect to the new server
 provider "postgresql" {
   host            = var.admin_db_host
   port            = var.admin_db_port
