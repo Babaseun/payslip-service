@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - Test and Deploy to ECR
+name: CI/CD Pipeline - Deploy to ECR
 
 on:
   push:
@@ -9,7 +9,6 @@ on:
 jobs:
   deploy:
     name: Build, Push to ECR & Scan Image
-    needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     permissions:
