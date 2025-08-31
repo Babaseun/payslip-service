@@ -5,7 +5,6 @@
 ## 🔧 Tech Stack
 
 - **Flask** – Python web framework for API development
-- **Prometheus** – Metrics collection and monitoring
 - **Docker** – Containerization of the app
 - **AWS ECR** – Hosting and deployment of Docker images
 - **Pipenv** – Python dependency management
