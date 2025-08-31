@@ -8,6 +8,8 @@
 - **Docker** – Containerization of the app
 - **AWS ECR** – Hosting and deployment of Docker images
 - **Pipenv** – Python dependency management
+- **AWS S3** – Object storage of uploaded pdf files
+- **Pytest** – Unit testing framework
 
 ---
 
@@ -35,6 +37,12 @@ cd payslip-service
     python3 run.py
 
     The server will be listening on port 5000
+   ```
+
+3. To run test unit tests:
+
+   ```
+   pipenv run pytest
    ```
 
 ### Endpoints
