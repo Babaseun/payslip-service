@@ -1,7 +1,6 @@
 # ECS Cluster with cost-optimized settings
 resource "aws_ecs_cluster" "payslip_cluster" {
-  provider = aws.assume
-  name     = "${var.environment}-payslip-cluster"
+  name = "${var.environment}-payslip-cluster"
 
   setting {
     name  = "containerInsights"
@@ -15,10 +14,20 @@ resource "aws_ecs_cluster" "payslip_cluster" {
   }
 }
 
+resource "aws_ecs_cluster_capacity_providers" "payslip_cluster_cp" {
+  cluster_name       = aws_ecs_cluster.payslip_cluster.name
+  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
+
+  default_capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 100
+    base              = 0
+  }
+}
+
 # Task Execution IAM Role
 resource "aws_iam_role" "ecs_task_execution_role" {
-  provider = aws.assume
-  name     = "${var.environment}-ecs-task-execution-role"
+  name = "${var.environment}-ecs-task-execution-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -42,14 +51,12 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 
 # Attach the AmazonECSTaskExecutionRolePolicy to the role
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
-  provider   = aws.assume
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 # ECS Task Definition with right-sized resources
 resource "aws_ecs_task_definition" "payslip_task" {
-  provider                 = aws.assume
   family                   = "${var.environment}-payslip-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -80,7 +87,7 @@ resource "aws_ecs_task_definition" "payslip_task" {
     ]
 
     healthCheck = {
-      command     = ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      command     = ["CMD-SHELL", "curl -f http://localhost:5000 || exit 1"]
       interval    = 30
       timeout     = 5
       retries     = 3
@@ -106,7 +113,6 @@ resource "aws_ecs_task_definition" "payslip_task" {
 
 # Security Group for ECS Service
 resource "aws_security_group" "ecs_service_sg" {
-  provider    = aws.assume
   name        = "${var.environment}-ecs-service-sg"
   description = "Security group for ECS service allowing traffic from NLB"
   vpc_id      = aws_vpc.payslip_vpc.id
@@ -134,7 +140,6 @@ resource "aws_security_group" "ecs_service_sg" {
 
 # ECS Service with Fargate Spot capacity provider and fixed desired count
 resource "aws_ecs_service" "payslip_service" {
-  provider            = aws.assume
   name                = "${var.environment}-payslip-service"
   cluster             = aws_ecs_cluster.payslip_cluster.id
   task_definition     = aws_ecs_task_definition.payslip_task.arn
@@ -149,9 +154,9 @@ resource "aws_ecs_service" "payslip_service" {
   }
 
   network_configuration {
-    subnets          = [aws_subnet.public_zone1.id]
+    subnets          = [aws_subnet.sn-app-A.id, aws_subnet.sn-app-B.id, aws_subnet.sn-app-C.id]
     security_groups  = [aws_security_group.ecs_service_sg.id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   load_balancer {
@@ -174,7 +179,6 @@ resource "aws_ecs_service" "payslip_service" {
 
 # CloudWatch Log Group with reduced retention period
 resource "aws_cloudwatch_log_group" "ecs_log_group" {
-  provider          = aws.assume
   name              = "/ecs/${var.environment}-payslip-task"
   retention_in_days = 3 # Reduced from 7 to 3 days to save costs
 

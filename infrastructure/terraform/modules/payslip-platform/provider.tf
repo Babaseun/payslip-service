@@ -16,23 +16,23 @@ provider "aws" {
   profile = local.terraform_profile
 }
 
-# The provider that will assume the role for managing resources.
-# All infrastructure will be created by this provider.
-provider "aws" {
-  alias  = "assume"
-  region = local.region
+# # The provider that will assume the role for managing resources.
+# # All infrastructure will be created by this provider.
+# provider "aws" {
+#   alias  = "assume"
+#   region = local.region
 
-  assume_role {
-    # Hardcoded the ARN to avoid needing iam:GetRole permissions
-    role_arn     = "arn:aws:iam::${local.aws_account_id}:role/${local.role_to_assume}"
-    session_name = "TerraformSession-${local.role_to_assume}"
-  }
+#   assume_role {
+#     # Hardcoded the ARN to avoid needing iam:GetRole permissions
+#     role_arn     = "arn:aws:iam::${local.aws_account_id}:role/${local.role_to_assume}"
+#     session_name = "TerraformSession-${local.role_to_assume}"
+#   }
 
-  default_tags {
-    tags = {
-      ManagedBy   = local.role_to_assume
-      Provisioner = "Terraform"
-      Environment = var.environment
-    }
-  }
-}
+#   default_tags {
+#     tags = {
+#       ManagedBy   = local.role_to_assume
+#       Provisioner = "Terraform"
+#       Environment = var.environment
+#     }
+#   }
+# }

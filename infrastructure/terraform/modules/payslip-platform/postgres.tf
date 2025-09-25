@@ -26,7 +26,7 @@ resource "aws_kms_alias" "payslip_rds_key_alias" {
 
 resource "aws_db_subnet_group" "payslip_postgres_database_subnet_group" {
   name       = "${var.environment}-payslip-postgres-database-subnet-group"
-  subnet_ids = [aws_subnet.payslip_public_subnet_1.id, aws_subnet.payslip_public_subnet_2.id]
+  subnet_ids = [aws_subnet.sn-db-A.id, aws_subnet.sn-db-B.id, aws_subnet.sn-db-C.id]
 
   tags = {
     Name = "${var.environment}-payslip-postgres-database-subnet-group"
