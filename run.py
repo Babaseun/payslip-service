@@ -5,7 +5,7 @@ app = create_app()
 
 @app.route('/')
 def root():
-    return 'API is running..........'
+    return 'API is running..........', 200
 
 
 if __name__ == '__main__':
